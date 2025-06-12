@@ -1,0 +1,2 @@
+# CastAI-MCP
+CastAI-MCP
