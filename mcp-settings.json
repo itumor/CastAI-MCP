@@ -1,5 +1,8 @@
 {
   "mcpServers": {
-    
+    "local": {
+      "baseUrl": "http://localhost:8000",
+      "specUrl": "http://localhost:8000/openapi.json"
+    }
   }
 }
