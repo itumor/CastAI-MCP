@@ -1,0 +1,32 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt pytest
+      - name: Run tests
+        run: |
+          PYTHONPATH=. pytest -q
+      - name: Build Docker image
+        run: |
+          docker build -t castai-mcp .
+      - name: Run container
+        run: |
+          docker run -d --name castai -p 8000:8000 castai-mcp
+          sleep 5
+          curl -f http://localhost:8000/openapi.json | head -c 20
+          docker stop castai
+          docker rm castai
